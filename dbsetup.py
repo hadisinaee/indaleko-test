@@ -25,6 +25,9 @@ def run_command(command : str) -> None:
         return output.decode('utf-8').strip()
     except subprocess.CalledProcessError as e:
         logging.debug(f"Command `{command}` failed with error:\n{e.output.decode('utf-8').strip()}")
+        if "Is the docker daemon running" in e.output.decode('utf-8').strip():
+            print("Docker daemon is no running.")
+            exit(1)
         return None
 
 def stop_container(container_name_or_id : str) -> None:
