@@ -4,4 +4,4 @@ logs/*
 __pycache__/*
 wmiobject-list.txt
 *.log
-
+*.pyc
