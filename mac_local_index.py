@@ -6,7 +6,6 @@ import platform
 import os
 import subprocess
 import re
-import uuid
 
 class IdalekoMacMachineConfig:
     '''
@@ -60,17 +59,17 @@ def construct_mac_output_file_name(path : str, configdir = './config'):
 
 def build_stat_dict(name: str, root : str, config : IdalekoMacMachineConfig, last_uri = None, last_drive = None) -> tuple:
     file_path = os.path.join(root, name)
-    last_uri = file_path
     try:
         stat_data = os.stat(file_path)
     except:
         logging.warning(f'Unable to stat {file_path}')
         return None
     stat_dict = {key : getattr(stat_data, key) for key in dir(stat_data) if key.startswith('st_')}
+    stat_dict['is_dir'] = os.path.isdir(file_path)
     stat_dict['file'] = name
     stat_dict['path'] = root
-    stat_dict['URI'] = os.path.join(last_uri, name)
-    return (stat_dict, last_uri, last_drive)
+    stat_dict['URI'] = file_path
+    return (stat_dict, file_path, last_drive)
 
 def walk_files_and_directories(path: str, config : IdalekoMacMachineConfig) -> list:
     files_data = []
